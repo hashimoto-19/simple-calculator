@@ -10,9 +10,9 @@ function App() {
         <div>
           <h1 className="text-2xl font-bold">計算機</h1>
         </div>
-        <div className="calculator bg-zinc-900 rounded-lg">
+        <div className="calculator bg-zinc-900 rounded-lg w-[60%] mx-auto p-20">
           <div className="display">
-            <div>display</div>
+            <div className="text-white text-4xl font-bold">display</div>
           </div>
           <div className="buttons">
             <div className="button">7</div>

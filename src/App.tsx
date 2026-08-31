@@ -1,6 +1,6 @@
 // import { useState } from "react";
 import "./App.css";
-
+import "./types.ts";
 function App() {
   // const [count, setCount] = useState(0);
 

@@ -1,1 +1,7 @@
-プロジェクトの src フォルダ内などに types.ts（または types/index.ts）という名前でファイルを作成します。ファイル内で type や interface を使い、必要な型を定義して export を付けます。他のファイルから import して再利用します。
+// プロジェクトの src フォルダ内などに types.ts（または types/index.ts）という名前でファイルを作成します。ファイル内で type や interface を使い、必要な型を定義して export を付けます。他のファイルから import して再利用します。
+
+
+// 型の決め方
+// 数字なので、基本int型を使う
+    
+

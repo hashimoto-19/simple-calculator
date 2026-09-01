@@ -78,17 +78,17 @@
 
 ### A. 開発の始め方
 
-- [ ] `npm run dev` を実行し、ブラウザで初期画面が出ることを確認する
-- [ ] `main` から作業ブランチを切る（例: `feature/calculator-ui`）。すでに `feature/calc-page_hashimoto` があるならそれを使ってよい
+- [●] `npm run dev` を実行し、ブラウザで初期画面が出ることを確認する
+- [●] `main` から作業ブランチを切る（例: `feature/calculator-ui`）。すでに `feature/calc-page_hashimoto` があるならそれを使ってよい
 
 ### B. Tailwind CSS を使えるようにする
 
 パッケージと `vite.config.ts` のプラグインは入っている。CSS 側が未接続。
 
-- [ ] Tailwind v4 の公式ドキュメントで、Vite での使い方を確認する
-- [ ] `src/index.css` に Tailwind を読み込む記述を追加する
-- [ ] `src/App.tsx` のどこかに Tailwind の `className` を1つ書き、色や余白が変わるか確認する
-- [ ] 確認できたら、Vite 初期画面用の見た目（`App.css` や `index.css` のテンプレ CSS）を電卓用に整理する準備をする
+- [●] Tailwind v4 の公式ドキュメントで、Vite での使い方を確認する
+- [●] `src/index.css` に Tailwind を読み込む記述を追加する
+- [●] `src/App.tsx` のどこかに Tailwind の `className` を1つ書き、色や余白が変わるか確認する
+- [●] 確認できたら、Vite 初期画面用の見た目（`App.css` や `index.css` のテンプレ CSS）を電卓用に整理する準備をする
 
 ### C. 型を先に決める
 

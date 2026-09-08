@@ -5,6 +5,8 @@ type DisplayProps = {
 }
 
 export function Display ({ value }: DisplayProps) {
-
+    return (
+        <div>{value}</div>
+    );
 }
 

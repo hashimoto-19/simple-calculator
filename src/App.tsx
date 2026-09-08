@@ -1,18 +1,23 @@
-// import { useState } from "react";
+import { Display } from "./components/Display";// import { useState } from "react";
 import "./index.css";
 
+
+function Header({ title, className }: { title: string; className?: string }) {
+  console.log(title);
+  return <h1 className={className}>{title}</h1>;
+}
+
 function App() {
-  // const [count, setCount] = useState(0);
 
   return (
     <>
+      {/* propsでtitleを渡して、classNameを渡して、text-2xl font-boldを渡して、計算機という文字を表示してください */}
+      <Header className="text-center font-bold mt-15" title="計算機" />
+     
       <section id="center">
-        <div>
-          <h1 className="text-2xl font-bold">計算機</h1>
-        </div>
         <div className="calculator bg-zinc-900 rounded-lg w-[60%] mx-auto p-20">
           <div className="display">
-            <div className="text-white text-4xl font-bold">display</div>
+            <div className="text-white text-4xl font-bold"><Display value="0" /></div>
           </div>
           <div className="buttons">
             <div className="button">7</div>
@@ -46,3 +51,5 @@ function App() {
 }
 
 export default App;
+
+

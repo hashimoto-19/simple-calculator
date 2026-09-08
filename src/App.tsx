@@ -1,15 +1,20 @@
 // import { useState } from "react";
 import "./index.css";
 
+
+function Header({ title, className }: { title: string; className: string }) {
+  console.log(title);
+  return <h1 className={className}>{title}</h1>;
+}
+
 function App() {
   // const [count, setCount] = useState(0);
 
   return (
     <>
+      <Header className="text-2xl font-bold" title="計算機" />
+     
       <section id="center">
-        <div>
-          <h1 className="text-2xl font-bold">計算機</h1>
-        </div>
         <div className="calculator bg-zinc-900 rounded-lg w-[60%] mx-auto p-20">
           <div className="display">
             <div className="text-white text-4xl font-bold">display</div>

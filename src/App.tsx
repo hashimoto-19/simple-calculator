@@ -1,4 +1,4 @@
-// import { useState } from "react";
+import { Display } from "./components/Display";// import { useState } from "react";
 import "./index.css";
 
 
@@ -12,12 +12,12 @@ function App() {
   return (
     <>
       {/* propsでtitleを渡して、classNameを渡して、text-2xl font-boldを渡して、計算機という文字を表示してください */}
-      <Header className="text-center font-bold" title="計算機" />
+      <Header className="text-center font-bold mt-15" title="計算機" />
      
       <section id="center">
         <div className="calculator bg-zinc-900 rounded-lg w-[60%] mx-auto p-20">
           <div className="display">
-            <div className="text-white text-4xl font-bold">display</div>
+            <div className="text-white text-4xl font-bold"><Display value="0" /></div>
           </div>
           <div className="buttons">
             <div className="button">7</div>
@@ -51,3 +51,5 @@ function App() {
 }
 
 export default App;
+
+

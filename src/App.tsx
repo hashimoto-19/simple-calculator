@@ -2,17 +2,17 @@
 import "./index.css";
 
 
-function Header({ title, className }: { title: string; className: string }) {
+function Header({ title, className }: { title: string; className?: string }) {
   console.log(title);
   return <h1 className={className}>{title}</h1>;
 }
 
 function App() {
-  // const [count, setCount] = useState(0);
 
   return (
     <>
-      <Header className="text-2xl font-bold" title="計算機" />
+      {/* propsでtitleを渡して、classNameを渡して、text-2xl font-boldを渡して、計算機という文字を表示してください */}
+      <Header className="text-center font-bold" title="計算機" />
      
       <section id="center">
         <div className="calculator bg-zinc-900 rounded-lg w-[60%] mx-auto p-20">

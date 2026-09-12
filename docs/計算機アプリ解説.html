@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>シンプル計算機アプリ 解説資料</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 14mm 14mm 16mm 14mm;
+    }
+
+    :root {
+      --ink: #1a1d21;
+      --muted: #5b6168;
+      --line: #d5d8dc;
+      --paper: #ffffff;
+      --band: #f4f5f7;
+      --accent: #1f4e79;
+      --accent-soft: #e8eef5;
+      --ok: #1b6b3a;
+      --ok-soft: #e6f4ea;
+      --wait: #8a5a12;
+      --wait-soft: #fff4e0;
+      --code-bg: #f6f7f9;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      font-size: 11.5pt;
+      line-height: 1.7;
+    }
+
+    .page {
+      max-width: 210mm;
+      margin: 0 auto;
+      padding: 8mm 4mm 12mm;
+    }
+
+    h1 {
+      font-size: 22pt;
+      line-height: 1.3;
+      margin: 0 0 8px;
+      color: var(--accent);
+      letter-spacing: 0.02em;
+    }
+
+    h2 {
+      font-size: 15pt;
+      color: var(--accent);
+      border-bottom: 2px solid var(--accent);
+      padding-bottom: 4px;
+      margin: 28px 0 12px;
+      page-break-after: avoid;
+    }
+
+    h3 {
+      font-size: 12.5pt;
+      margin: 20px 0 8px;
+      color: var(--ink);
+      page-break-after: avoid;
+    }
+
+    p { margin: 0 0 10px; }
+
+    .lead {
+      font-size: 11pt;
+      color: var(--muted);
+      margin-bottom: 16px;
+    }
+
+    .meta {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      font-size: 10pt;
+      color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .note {
+      background: var(--accent-soft);
+      border-left: 4px solid var(--accent);
+      padding: 10px 14px;
+      margin: 12px 0 18px;
+      page-break-inside: avoid;
+    }
+
+    .note strong { color: var(--accent); }
+
+    .diagram {
+      background: var(--band);
+      border: 1px solid var(--line);
+      padding: 14px 12px 10px;
+      margin: 12px 0 18px;
+      page-break-inside: avoid;
+    }
+
+    .diagram-title {
+      font-size: 10pt;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 0 0 8px;
+    }
+
+    .caption {
+      font-size: 9pt;
+      color: var(--muted);
+      margin: 6px 0 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10pt;
+      margin: 8px 0 16px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 7px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: var(--accent);
+      color: #fff;
+      font-weight: 600;
+    }
+
+    tr:nth-child(even) td { background: var(--band); }
+
+    code, .path {
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 0.92em;
+      background: var(--code-bg);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+
+    pre {
+      background: var(--code-bg);
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      font-family: "SF Mono", Menlo, Consolas, monospace;
+      font-size: 9.5pt;
+      line-height: 1.55;
+      overflow: hidden;
+      page-break-inside: avoid;
+      white-space: pre-wrap;
+    }
+
+    ul, ol { margin: 0 0 12px; padding-left: 22px; }
+    li { margin-bottom: 4px; }
+
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin: 8px 0;
+    }
+
+    .box {
+      display: inline-block;
+      border: 1.5px solid var(--accent);
+      background: #fff;
+      padding: 7px 10px;
+      border-radius: 4px;
+      font-size: 9.5pt;
+      font-weight: 600;
+      text-align: center;
+      min-width: 72px;
+      line-height: 1.35;
+    }
+
+    .box.small { min-width: 0; font-weight: 500; font-size: 9pt; padding: 6px 8px; }
+    .box.wide { min-width: 120px; }
+    .box.done { background: var(--ok-soft); border-color: var(--ok); }
+    .box.wip { background: var(--wait-soft); border-color: var(--wait); }
+    .box.todo { background: #fff; border-color: #9aa1a9; color: var(--muted); }
+    .box.file { background: #fff; border-color: var(--accent); }
+    .box.cfg { background: var(--accent-soft); }
+
+    .arrow {
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14pt;
+      line-height: 1;
+    }
+
+    .arrow-down {
+      text-align: center;
+      color: var(--accent);
+      font-weight: 700;
+      font-size: 14pt;
+      margin: 2px 0;
+    }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      font-size: 9pt;
+      margin-top: 8px;
+    }
+
+    .legend span { display: inline-flex; align-items: center; gap: 6px; }
+    .swatch {
+      width: 14px; height: 14px; border: 1.5px solid #333; display: inline-block;
+    }
+    .swatch.done { background: var(--ok-soft); border-color: var(--ok); }
+    .swatch.wip { background: var(--wait-soft); border-color: var(--wait); }
+    .swatch.todo { background: #fff; border-color: #9aa1a9; }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      page-break-inside: avoid;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      padding: 10px 12px;
+      background: #fff;
+    }
+
+    .card h4 {
+      margin: 0 0 6px;
+      font-size: 11pt;
+      color: var(--accent);
+    }
+
+    .toc ol { margin-bottom: 0; }
+    .toc a { color: var(--accent); text-decoration: none; }
+
+    .footer-note {
+      margin-top: 28px;
+      padding-top: 10px;
+      border-top: 1px solid var(--line);
+      font-size: 9pt;
+      color: var(--muted);
+    }
+
+    @media print {
+      .page { padding: 0; max-width: none; }
+      a { color: inherit; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <h1>シンプル計算機アプリ 解説資料</h1>
+    <p class="lead">制作の流れ・ファイルの関係・各ファイルの役割・React の使い方</p>
+    <div class="meta">
+      <span>対象リポジトリ: simple-calculator</span>
+      <span>技術: Vite + React 19 + TypeScript + Tailwind CSS v4</span>
+      <span>作成日: 2026-09-12</span>
+    </div>
+
+    <div class="note">
+      <strong>先に結論:</strong>
+      このアプリは <strong>Next.js ではありません。</strong>
+      ブラウザで動く1ページの React アプリを、<strong>Vite</strong> という開発サーバー兼ビルドツールで動かしています。
+      Next.js の <code>app/page.tsx</code>、サーバーコンポーネント、ルーティングは使っていません。
+    </div>
+
+    <div class="toc card">
+      <h4>目次</h4>
+      <ol>
+        <li>制作の流れ</li>
+        <li>ファイルの関係性</li>
+        <li>各ファイルが何をしているか</li>
+        <li>React / Vite の機能の使い方（Next.js との違い含む）</li>
+      </ol>
+    </div>
+
+    <h2>1. 制作の流れ</h2>
+
+    <h3>1-1. 学習課題としての全体像</h3>
+    <p>
+      目標は「iPhone 風の電卓」を、現場に近い進め方で作ることです。
+      見た目 → 数字入力 → 計算 → 連続計算 → 公開、の順に小さく進めます。
+    </p>
+
+    <div class="diagram">
+      <p class="diagram-title">図1. 制作ロードマップ（README の ToDo に対応）</p>
+      <div class="flow-row">
+        <div class="box done">A. 開発開始<br><span style="font-weight:500">npm run dev</span></div>
+        <div class="arrow">→</div>
+        <div class="box done">B. Tailwind<br><span style="font-weight:500">見た目の土台</span></div>
+        <div class="arrow">→</div>
+        <div class="box wip">C. 型定義<br><span style="font-weight:500">types.ts</span></div>
+        <div class="arrow">→</div>
+        <div class="box wip">D. UI分割<br><span style="font-weight:500">Display / Button</span></div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-row">
+        <div class="box wip">E. 数字入力<br><span style="font-weight:500">useState</span></div>
+        <div class="arrow">→</div>
+        <div class="box wip">F. AC</div>
+        <div class="arrow">→</div>
+        <div class="box todo">G. 演算子を覚える</div>
+        <div class="arrow">→</div>
+        <div class="box todo">G-3. calculate関数</div>
+      </div>
+      <div class="arrow-down">↓</div>
+      <div class="flow-row">
+        <div class="box todo">G-4. = で計算</div>
+        <div class="arrow">→</div>
+        <div class="box todo">H. 連続計算</div>
+        <div class="arrow">→</div>
+        <div class="box todo">I. 見た目仕上げ</div>
+        <div class="arrow">→</div>
+        <div class="box todo">J. GitHub Pages</div>
+      </div>
+      <div class="legend">
+        <span><i class="swatch done"></i> 完了に近い</span>
+        <span><i class="swatch wip"></i> 途中（いまここ）</span>
+        <span><i class="swatch todo"></i> これから</span>
+      </div>
+      <p class="caption">出典: リポジトリ README の「自分で進める細かいタスク」と、現在の src コード。</p>
+    </div>
+
+    <h3>1-2. いまの実装位置</h3>
+    <p>骨格はあります。計算ロジックはまだ途中です。</p>
+    <table>
+      <thead>
+        <tr><th>できていること</th><th>まだ途中のこと</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            Vite + React + TypeScript の起動<br>
+            Tailwind の className で電卓の枠を描画<br>
+            Display / Button への分割<br>
+            数字ボタンで画面の数字が変わる<br>
+            AC で表示が 0 に戻る
+          </td>
+          <td>
+            数字の連結（今は押した1桁で上書き）<br>
+            小数点入力<br>
+            ＋−×÷ の計算<br>
+            連続計算<br>
+            types.ts を App から使う<br>
+            iPhone 風の色分け・0ボタン横長<br>
+            GitHub Pages 公開
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>1-3. Git / GitHub の進め方（現場想定）</h3>
+    <p>コードの作り方とは別に、提出用の流れは次のとおりです。</p>
+    <div class="diagram">
+      <p class="diagram-title">図2. ブランチとプルリクエストの流れ</p>
+      <div class="flow-row">
+        <div class="box cfg">Issue<br>（やることを書く）</div>
+        <div class="arrow">→</div>
+        <div class="box">作業ブランチ<br>feature/...</div>
+        <div class="arrow">→</div>
+        <div class="box">小さく実装<br>＋コミット</div>
+        <div class="arrow">→</div>
+        <div class="box">Pull Request</div>
+        <div class="arrow">→</div>
+        <div class="box done">main にマージ</div>
+      </div>
+      <p class="caption">main に直接コミットしない。1機能ごとに確認できる単位で進める。</p>
+    </div>
+
+    <h3>1-4. パソコンを起動して画面が出るまでの流れ</h3>
+    <p><code>npm run dev</code> を実行すると、Vite が開発サーバーを立て、ブラウザが HTML を読みます。</p>
+    <div class="diagram">
+      <p class="diagram-title">図3. 起動時の読み込み順</p>
+      <div class="box wide" style="display:block; margin:0 auto 4px;">ブラウザ</div>
+      <div class="arrow-down">↓ ページを開く</div>
+      <div class="box wide" style="display:block; margin:0 auto 4px;">index.html<br><span style="font-weight:500">空の &lt;div id="root"&gt;</span></div>
+      <div class="arrow-down">↓ script で読み込む</div>
+      <div class="box wide" style="display:block; margin:0 auto 4px;">src/main.tsx<br><span style="font-weight:500">root に React をマウント</span></div>
+      <div class="arrow-down">↓ App を描画</div>
+      <div class="box wide" style="display:block; margin:0 auto 4px;">src/App.tsx<br><span style="font-weight:500">計算機の画面全体</span></div>
+      <div class="arrow-down">↓ 子コンポーネント</div>
+      <div class="flow-row">
+        <div class="box">Display<br>数字の表示</div>
+        <div class="box">Button × 16<br>各キー</div>
+      </div>
+    </div>
+
+    <h3>1-5. ボタンを押したあとのデータの流れ</h3>
+    <p>いま動いているのは「数字を押す → 表示をその数字にする」です。計算はまだしません。</p>
+    <div class="diagram">
+      <p class="diagram-title">図4. 数字ボタンをクリックしたときの流れ（現在の実装）</p>
+      <div class="flow-row">
+        <div class="box">ユーザーが<br>「8」を押す</div>
+        <div class="arrow">→</div>
+        <div class="box">Button の<br>onClick</div>
+        <div class="arrow">→</div>
+        <div class="box wide">App の<br>setDisplayValue("8")</div>
+        <div class="arrow">→</div>
+        <div class="box">displayValue<br>が更新</div>
+        <div class="arrow">→</div>
+        <div class="box">Display が<br>再描画</div>
+      </div>
+      <p class="caption">状態（state）は App が持ち、Display は受け取って表示するだけ。これが「親が状態を持ち、子は表示と入力に専念する」パターンです。</p>
+    </div>
+
+    <div class="note">
+      <strong>次に足す流れ（まだ未実装）:</strong>
+      数字は末尾に足す → 演算子を覚える（previousValue / operator）→
+      次の数字を入力 → <code>=</code> で calculate → 結果を表示。
+      連続計算では、演算子を押した時点で先に計算します。
+    </div>
+
+    <h2>2. ファイルの関係性</h2>
+    <p>アプリ本体は <code>src/</code> にあります。設定ファイルはルートに置き、実行時の画面には出ません。</p>
+
+    <div class="diagram">
+      <p class="diagram-title">図5. フォルダ構成（実行に関係するもの）</p>
+<pre>simple-calculator/
+├── index.html                 ← 最初に読まれる HTML
+├── package.json               ← 使うライブラリと npm スクリプト
+├── vite.config.ts             ← Vite と Tailwind / React プラグイン
+├── tsconfig*.json             ← TypeScript の設定
+├── public/                    ← favicon など、そのまま公開する静的ファイル
+└── src/
+    ├── main.tsx               ← React の入口
+    ├── index.css              ← Tailwind の読み込み
+    ├── App.tsx                ← 計算機の親コンポーネント
+    ├── App.css                ← 今は空（Vite 初期の名残）
+    ├── types.ts               ← 演算子などの型（まだ他から未使用）
+    └── components/
+        ├── Display.tsx        ← 画面の数字表示
+        └── button.tsx         ← 1つのキー</pre>
+    </div>
+
+    <div class="diagram">
+      <p class="diagram-title">図6. import の関係（矢印は「読み込んでいる」方向）</p>
+      <div class="flow-row" style="margin-bottom:10px;">
+        <div class="box cfg">index.html</div>
+        <div class="arrow">script</div>
+        <div class="box file">main.tsx</div>
+        <div class="arrow">import</div>
+        <div class="box file">App.tsx</div>
+      </div>
+      <div class="flow-row">
+        <div class="box file">App.tsx</div>
+        <div class="arrow">→</div>
+        <div class="box file">Display.tsx</div>
+      </div>
+      <div class="flow-row">
+        <div class="box file">App.tsx</div>
+        <div class="arrow">→</div>
+        <div class="box file">button.tsx</div>
+      </div>
+      <div class="flow-row">
+        <div class="box file">main.tsx / App.tsx</div>
+        <div class="arrow">→</div>
+        <div class="box file">index.css</div>
+        <div class="arrow">→</div>
+        <div class="box cfg">Tailwind</div>
+      </div>
+      <div class="flow-row" style="margin-top:10px;">
+        <div class="box todo">types.ts<br>（定義のみ。まだ import されていない）</div>
+      </div>
+      <p class="caption">Header はファイルではなく App.tsx の中に書いた小さなコンポーネントです。</p>
+    </div>
+
+    <div class="two-col">
+      <div class="card">
+        <h4>実行時に画面を作る層</h4>
+        <p style="margin:0; font-size:10.5pt;">
+          <code>index.html</code> → <code>main.tsx</code> → <code>App.tsx</code> →
+          <code>Display</code> / <code>Button</code>
+        </p>
+      </div>
+      <div class="card">
+        <h4>開発を支える層</h4>
+        <p style="margin:0; font-size:10.5pt;">
+          <code>package.json</code>、<code>vite.config.ts</code>、
+          <code>tsconfig</code>、<code>eslint.config.js</code>
+        </p>
+      </div>
+    </div>
+
+    <h3>Props でつながる親子関係</h3>
+    <div class="diagram">
+      <p class="diagram-title">図7. 親 App から子へ渡している値</p>
+      <table>
+        <thead>
+          <tr><th>親</th><th>子</th><th>渡している Props</th><th>意味</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>App</td>
+            <td>Header</td>
+            <td>title, className</td>
+            <td>見出し「計算機」と見た目</td>
+          </tr>
+          <tr>
+            <td>App</td>
+            <td>Display</td>
+            <td>value, className</td>
+            <td>今の数字を表示する</td>
+          </tr>
+          <tr>
+            <td>App</td>
+            <td>Button</td>
+            <td>label, className, onClick</td>
+            <td>キーの文字・見た目・押したときの処理</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="caption">子は自分で計算しません。何を表示し、押されたら親のどの関数を呼ぶか、親が決めます。</p>
+    </div>
+
+    <h2>3. 各ファイルが何をしているか</h2>
+
+    <h3>3-1. アプリ本体</h3>
+    <table>
+      <thead>
+        <tr><th>ファイル</th><th>役割</th><th>いまやっていること</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>index.html</code></td>
+          <td>ページの器</td>
+          <td>
+            タイトル、言語、favicon を設定。
+            <code>&lt;div id="root"&gt;</code> は空で、React が中身を描き込む。
+            <code>/src/main.tsx</code> をモジュールとして読み込む。
+          </td>
+        </tr>
+        <tr>
+          <td><code>src/main.tsx</code></td>
+          <td>React の入口</td>
+          <td>
+            <code>createRoot</code> で root にアプリを載せる。
+            <code>StrictMode</code> で開発中のチェックを有効にする。
+            <code>App</code> と全体 CSS を読み込む。
+          </td>
+        </tr>
+        <tr>
+          <td><code>src/App.tsx</code></td>
+          <td>計算機の本体（親）</td>
+          <td>
+            <code>useState("0")</code> で表示値を持つ。
+            Header / Display / 16個の Button を並べる。
+            数字と AC のクリックで state を更新する。
+            Tailwind で枠・グリッド・余白を指定する。
+          </td>
+        </tr>
+        <tr>
+          <td><code>src/components/Display.tsx</code></td>
+          <td>ディスプレイ</td>
+          <td>
+            <code>value</code>（文字列）を受け取って表示するだけ。
+            計算はしない。表示専用の部品。
+          </td>
+        </tr>
+        <tr>
+          <td><code>src/components/button.tsx</code></td>
+          <td>キー1個</td>
+          <td>
+            <code>label</code> をボタン文字にする。
+            <code>onClick</code> があれば押したときに実行。
+            演算子ボタンの一部は onClick 未設定。
+          </td>
+        </tr>
+        <tr>
+          <td><code>src/types.ts</code></td>
+          <td>型の置き場</td>
+          <td>
+            <code>Operator</code> <code>Digit</code> などは定義済み。
+            <code>CalculatorState</code> などは空。
+            他ファイルから import されていない。
+          </td>
+        </tr>
+        <tr>
+          <td><code>src/index.css</code></td>
+          <td>全体スタイルの入口</td>
+          <td><code>@import "tailwindcss";</code> のみ。これで utility class が使える。</td>
+        </tr>
+        <tr>
+          <td><code>src/App.css</code></td>
+          <td>（未使用）</td>
+          <td>中身は空。Vite テンプレートの名残。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3-2. 設定・開発用ファイル</h3>
+    <table>
+      <thead>
+        <tr><th>ファイル</th><th>役割</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code>package.json</code></td>
+          <td>
+            プロジェクト名、依存関係、スクリプト。
+            <code>npm run dev</code> は Vite 起動、
+            <code>npm run build</code> は TypeScript チェック後に本番用ファイルを作る。
+          </td>
+        </tr>
+        <tr>
+          <td><code>vite.config.ts</code></td>
+          <td>
+            Vite の設定。
+            <code>@vitejs/plugin-react</code> で JSX を変換。
+            <code>@tailwindcss/vite</code> で Tailwind をビルドに乗せる。
+          </td>
+        </tr>
+        <tr>
+          <td><code>tsconfig.json</code></td>
+          <td>TypeScript 設定の親。アプリ用と Vite 用に分割して参照する。</td>
+        </tr>
+        <tr>
+          <td><code>tsconfig.app.json</code></td>
+          <td>
+            <code>src</code> 向け。JSX は <code>react-jsx</code>（import React 不要）。
+            ブラウザ向けの型（DOM）を使う。
+          </td>
+        </tr>
+        <tr>
+          <td><code>tsconfig.node.json</code></td>
+          <td><code>vite.config.ts</code> 向け。Node 上で読む設定ファイル用。</td>
+        </tr>
+        <tr>
+          <td><code>eslint.config.js</code></td>
+          <td>コードの書き方チェック。React Hooks のルールも含む。</td>
+        </tr>
+        <tr>
+          <td><code>public/</code></td>
+          <td>ビルドしても中身を変換しない静的ファイル（favicon など）。</td>
+        </tr>
+        <tr>
+          <td><code>README.md</code></td>
+          <td>課題説明と、A〜K の学習タスク一覧。</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>3-3. 名前の注意（Button の import）</h3>
+    <p>
+      <code>App.tsx</code> は <code>./components/Button</code> を読み、実ファイル名は <code>button.tsx</code> です。
+      macOS の標準ディスクは大文字小文字を区別しないことが多いので動きます。
+      GitHub の Linux 環境では失敗することがあるので、ファイル名と import を揃えるのが安全です。
+    </p>
+
+    <h2>4. React / Vite の機能の使い方</h2>
+    <p>
+      Next.js 特有の機能（App Router、サーバーコンポーネント、<code>next/link</code>、SSR）は使っていません。
+      使っているのは <strong>React 本体</strong> と <strong>Vite</strong> です。
+    </p>
+
+    <h3>4-1. このプロジェクトで使っている React</h3>
+    <table>
+      <thead>
+        <tr><th>機能</th><th>どこで</th><th>このアプリでの意味</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>関数コンポーネント</td>
+          <td>App / Header / Display / Button</td>
+          <td>
+            「画面の部品 = 関数」。受け取った値を JSX で返す。
+            クラスコンポーネントは使っていない。
+          </td>
+        </tr>
+        <tr>
+          <td>JSX</td>
+          <td>各 .tsx</td>
+          <td>
+            HTML に似た記法で UI を書く。
+            属性は <code>className</code>、<code>onClick</code> のように React 用の名前。
+          </td>
+        </tr>
+        <tr>
+          <td>Props</td>
+          <td>Display / Button / Header</td>
+          <td>
+            親から子へデータを渡す。
+            Display は <code>value</code>、Button は <code>label</code> と <code>onClick</code>。
+          </td>
+        </tr>
+        <tr>
+          <td>useState</td>
+          <td>App.tsx</td>
+          <td>
+            画面に出している文字列を覚える。
+            <code>const [displayValue, setDisplayValue] = useState("0")</code>。
+            更新すると App 以下が再描画される。
+          </td>
+        </tr>
+        <tr>
+          <td>イベントハンドラ</td>
+          <td>Button の onClick</td>
+          <td>
+            クリックで親の setter を呼ぶ。
+            例: <code>onClick={() =&gt; setDisplayValue("8")}</code>
+          </td>
+        </tr>
+        <tr>
+          <td>コンポーネント分割</td>
+          <td>components/</td>
+          <td>
+            表示とボタンを再利用可能な部品にする。
+            同じ Button を 16 回使い、label だけ変える。
+          </td>
+        </tr>
+        <tr>
+          <td>createRoot</td>
+          <td>main.tsx</td>
+          <td>
+            React 19 のマウント方法。
+            HTML の root に仮想 DOM の木を載せる。
+          </td>
+        </tr>
+        <tr>
+          <td>StrictMode</td>
+          <td>main.tsx</td>
+          <td>
+            開発中だけ、副作用の間違いを見つけやすくする。
+            本番の見た目は変えない。
+          </td>
+        </tr>
+        <tr>
+          <td>名前付き export / default export</td>
+          <td>各ファイル</td>
+          <td>
+            App は default export。
+            Display / Button は <code>export function</code>（名前付き）。
+            読み込み方が違う。
+          </td>
+        </tr>
+        <tr>
+          <td>再レンダリング</td>
+          <td>state 更新時</td>
+          <td>
+            setDisplayValue すると App が再実行され、
+            新しい value が Display に渡る。手動で DOM を書き換えない。
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+<pre>// App.tsx の中心（状態は親が持つ）
+const [displayValue, setDisplayValue] = useState("0");
+
+&lt;Display value={displayValue} /&gt;
+&lt;Button label="8" onClick={() =&gt; setDisplayValue("8")} /&gt;
+&lt;Button label="AC" onClick={() =&gt; setDisplayValue("0")} /&gt;</pre>
+
+    <h3>4-2. TypeScript の使い方</h3>
+    <ul>
+      <li>Props の型（<code>ButtonProps</code>、<code>DisplayProps</code>）で、渡し忘れをコンパイル時に防ぐ。</li>
+      <li><code>className?</code> と <code>onClick?</code> は任意。演算子ボタンはまだ onClick なしでも型エラーにならない。</li>
+      <li><code>types.ts</code> の <code>Operator = "+" | "-" | "×" | "÷"</code> はユニオン型。許す文字だけを型で固定する予定。</li>
+      <li>表示は <code>string</code>、計算するときだけ <code>number</code> にする、という方針が Display のコメントに書いてある。</li>
+    </ul>
+
+    <h3>4-3. Vite の使い方（Next.js の代わりになっている部分）</h3>
+    <table>
+      <thead>
+        <tr><th>やりたいこと</th><th>Next.js なら</th><th>このプロジェクトでは</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>開発サーバー</td>
+          <td><code>next dev</code></td>
+          <td><code>npm run dev</code> → Vite</td>
+        </tr>
+        <tr>
+          <td>ページの入口</td>
+          <td><code>app/page.tsx</code></td>
+          <td><code>index.html</code> + <code>src/main.tsx</code></td>
+        </tr>
+        <tr>
+          <td>JSX の変換</td>
+          <td>Next が内蔵</td>
+          <td><code>@vitejs/plugin-react</code></td>
+        </tr>
+        <tr>
+          <td>保存したらすぐ反映</td>
+          <td>Fast Refresh</td>
+          <td>Vite の HMR + React プラグイン</td>
+        </tr>
+        <tr>
+          <td>本番用ファイル</td>
+          <td><code>next build</code></td>
+          <td><code>npm run build</code>（tsc のあと vite build）</td>
+        </tr>
+        <tr>
+          <td>複数ページ / SSR</td>
+          <td>標準機能</td>
+          <td>使わない。電卓は1画面の SPA</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>4-4. Tailwind CSS の使い方</h3>
+    <ul>
+      <li><code>vite.config.ts</code> に <code>tailwindcss()</code> プラグイン。</li>
+      <li><code>index.css</code> で <code>@import "tailwindcss"</code>。</li>
+      <li>コンポーネントの <code>className</code> に utility を書く。</li>
+    </ul>
+    <table>
+      <thead>
+        <tr><th>className の例</th><th>効果</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>bg-zinc-900 rounded-lg w-[80%] mx-auto p-20</code></td><td>暗い背景、角丸、幅80%、中央、大きな余白</td></tr>
+        <tr><td><code>grid grid-cols-4 gap-4</code></td><td>ボタンを4列の格子に並べる</td></tr>
+        <tr><td><code>text-white text-4xl font-bold</code></td><td>白い大きな太字</td></tr>
+        <tr><td><code>text-center font-bold mt-15 mb-6</code></td><td>見出しを中央・太字・上下余白</td></tr>
+      </tbody>
+    </table>
+
+    <h3>4-5. データと描画の役割分担（覚えると計算実装が楽）</h3>
+    <div class="diagram">
+      <p class="diagram-title">図8. これから計算を足すときの役割分担</p>
+      <table>
+        <thead>
+          <tr><th>層</th><th>担当ファイル（予定）</th><th>仕事</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>表示</td>
+            <td>Display.tsx</td>
+            <td>文字列を出すだけ</td>
+          </tr>
+          <tr>
+            <td>入力</td>
+            <td>button.tsx</td>
+            <td>押されたことを親に伝えるだけ</td>
+          </tr>
+          <tr>
+            <td>状態</td>
+            <td>App.tsx（または Calculator.tsx）</td>
+            <td>今の数字、前の数字、演算子を useState で持つ</td>
+          </tr>
+          <tr>
+            <td>計算</td>
+            <td>utils/calculate.ts（未作成）</td>
+            <td>UI を知らない純粋な関数。例: calculate(1, 2, "+") → 3</td>
+          </tr>
+          <tr>
+            <td>型</td>
+            <td>types.ts</td>
+            <td>許す演算子・状態の形を固定する</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>4-6. Next.js を後から使うとしたら</h3>
+    <p>今の電卓に Next.js は必須ではありません。もし乗せるなら、だいたい次の対応になります。</p>
+    <ul>
+      <li><code>src/App.tsx</code> の中身 → <code>app/page.tsx</code>（クライアントで state を使うなら先頭に <code>"use client"</code>）</li>
+      <li><code>src/main.tsx</code> と <code>index.html</code> → Next.js が用意するので不要になる</li>
+      <li>Display / Button はそのままコンポーネントとして使える</li>
+      <li>ページが1つなので、ルーティングの恩恵はほぼない</li>
+    </ul>
+
+    <h2>まとめ</h2>
+    <ol>
+      <li><strong>制作の流れ</strong>は、環境 → 見た目 → 型 → 部品分割 → state で数字 → 計算関数 → 公開。</li>
+      <li><strong>ファイル関係</strong>は <code>index.html → main.tsx → App.tsx → Display / Button</code>。</li>
+      <li><strong>App が状態を持ち</strong>、子は表示とクリック伝達に専念している。</li>
+      <li><strong>React</strong> のコンポーネント・Props・useState・onClick を使っている。<strong>Next.js は未使用</strong>で、開発基盤は Vite。</li>
+    </ol>
+
+    <div class="footer-note">
+      この資料はリポジトリの現行コード（App.tsx / Display.tsx / button.tsx / main.tsx / types.ts / README.md）に基づく。
+      ブラウザで HTML を開き、印刷 → PDF 保存でも再出力できる。
+    </div>
+  </div>
+</body>
+</html>

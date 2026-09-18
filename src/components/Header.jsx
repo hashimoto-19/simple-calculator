@@ -4,7 +4,7 @@ import { useState } from "react";
 
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
-}
+
 return (
     <header>
         <div className="container">
@@ -25,7 +25,7 @@ return (
         </div>
     </header>
 
-); }
+); 
 };
 export default Header;
 // useState ：
@@ -55,3 +55,30 @@ export default Header;
 // 今回は、{new Date().getFullYear()} のように、直接 JS の構文を記述しています
 // しかし、コメントアウトにある方法でも、同じ結果が出力されます。
 // １度変数に格納したほうが、マークアップが簡潔になるケースもありますよ！
+
+// React でのイベント処理の種類：
+
+// onClick: クリックイベント
+// onChange: 入力変更イベント
+// onSubmit: フォーム送信イベント
+// ボタンがクリックされた時（イベント発生時）に発火する関数を使用する方法を、しっかり学びましょう！
+
+
+// 3️⃣ 論理演算子（&&）を使った条件付きレンダリング
+// 前回学んだ三項演算子との違い：
+
+// function Message({ hasError, errorMessage }) {
+//   return (
+//     <div>
+//       {/* 論理演算子（&&）: 条件を満たす時だけ表示 */}
+//       {hasError && <p className="error">{errorMessage}</p>}
+
+//       {/* 三項演算子（? :）: 2つの選択肢から選ぶ */}
+//       {hasError ? (
+//         <p className="error">{errorMessage}</p>
+//       ) : (
+//         <p className="success">正常です</p>
+//       )}
+//     </div>
+//   );
+// }

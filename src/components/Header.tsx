@@ -5,7 +5,14 @@ import { useState } from "react";
 const Header = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+
+    function Header({ title, className }: { title: string; className?: string }) {
+        console.log(title);
+        return <h1 className={className}>{title}</h1>;
+      }
+
 return (
+    
     <header>
         <div className="container">
             {/* <h1>計算機アプリ</h1> */}

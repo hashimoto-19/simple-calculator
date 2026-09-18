@@ -1,13 +1,10 @@
 import { Display } from "./components/Display"; 
 import { Button }  from "./components/Button";
 import { useState } from "react";
-
+import Header from "./components/Header.tsx";
 import "./index.css";
 
-function Header({ title, className }: { title: string; className?: string }) {
-  console.log(title);
-  return <h1 className={className}>{title}</h1>;
-}
+
 
 function App() {
   const [displayValue, setDisplayValue] = useState("0");

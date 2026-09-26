@@ -1,10 +1,8 @@
-import { Display } from "./components/Display"; 
-import { Button }  from "./components/Button";
+import { Display } from "./components/Display";
+import { Button } from "./components/Button.tsx";
 import { useState } from "react";
 import Header from "./components/Header.tsx";
 import "./index.css";
-
-
 
 function App() {
   const [displayValue, setDisplayValue] = useState("0");
@@ -21,22 +19,74 @@ function App() {
             </div>
           </div>
           <div className="buttons grid grid-cols-4 gap-4">
-            <Button className="text-white text-4xl font-bold" label="8" onClick={() => setDisplayValue("8")} />
-            <Button className="text-white text-4xl font-bold" label="7" onClick={() => setDisplayValue("7")} />
-            <Button className="text-white text-4xl font-bold" label="9" onClick={() => setDisplayValue("9")} />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="8"
+              onClick={() => setDisplayValue("8")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="7"
+              onClick={() => setDisplayValue("7")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="9"
+              onClick={() => setDisplayValue("9")}
+            />
             <Button className="text-white text-4xl font-bold" label="÷" />
-            <Button className="text-white text-4xl font-bold" label="4" onClick={() => setDisplayValue("4")} />
-            <Button className="text-white text-4xl font-bold" label="5" onClick={() => setDisplayValue("5")} />
-            <Button className="text-white text-4xl font-bold" label="6" onClick={() => setDisplayValue("6")} />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="4"
+              onClick={() => setDisplayValue("4")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="5"
+              onClick={() => setDisplayValue("5")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="6"
+              onClick={() => setDisplayValue("6")}
+            />
             <Button className="text-white text-4xl font-bold" label="×" />
-            <Button className="text-white text-4xl font-bold" label="1" onClick={() => setDisplayValue("1")} />
-            <Button className="text-white text-4xl font-bold" label="2" onClick={() => setDisplayValue("2")} />
-            <Button className="text-white text-4xl font-bold" label="3" onClick={() => setDisplayValue("3")} />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="1"
+              onClick={() => setDisplayValue("1")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="2"
+              onClick={() => setDisplayValue("2")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="3"
+              onClick={() => setDisplayValue("3")}
+            />
             <Button className="text-white text-4xl font-bold" label="-" />
-            <Button className="text-white text-4xl font-bold" label="0" onClick={() => setDisplayValue("0")} />
-            <Button className="text-white text-4xl font-bold" label="AC" onClick={() => setDisplayValue("0")} />
-            <Button className="text-white text-4xl font-bold" label="=" onClick={() => console.log("equals")} />
-            <Button className="text-white text-4xl font-bold" label="+" onClick={() => console.log("plus")} />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="0"
+              onClick={() => setDisplayValue("0")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="AC"
+              onClick={() => setDisplayValue("0")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="="
+              onClick={() => console.log("equals")}
+            />
+            <Button
+              className="text-white text-4xl font-bold"
+              label="+"
+              onClick={() => console.log("plus")}
+            />
           </div>
         </div>
         {/* <button

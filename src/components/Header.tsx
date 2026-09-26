@@ -1,49 +1,15 @@
-import { FaBars, FaXmark } from "react-icons/fa6";
-import { useState } from "react";
-
-
-const Header = () => {
-    const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-
-    function Header({ title, className }: { title: string; className?: string }) {
-        console.log(title);
-        return <h1 className={className}>{title}</h1>;
-      }
-
-return (
-    
-    <header>
-        <div className="container">
-            {/* <h1>計算機アプリ</h1> */}
-            <button
-                onClick={() => setIsMenuOpen(!isMenuOpen)}
-                className="md:hidden"
-            >
-                {isMenuOpen ? <FaXmark /> : <FaBars />}
-            </button>
-            <nav className={`${isMenuOpen ? 'block' : 'hidden'}`}>
-                <ul>
-                    <li>
-                        <a href="#">Home</a>
-                    </li>
-                </ul>
-            </nav>
-        </div>
-    </header>
-
-); 
+type HeaderProps = {
+  title: string;
+  className?: string;
 };
-export default Header;
-// useState ：
 
-// React コンポーネントで、変数を管理するための、組み込みの機能です。
-// 今回は、ハンバーガーメニューが、開いているか、閉じているか（isMenuOpen）という値を、true or falseで管理しています。
-// 関数コンポーネントが return する、マークアップの中で JS を記述したいときは、波括弧（カーリーブラケット）{} の中に記述します
-// 今回は、JS の三項演算子（? :）を使って、条件分岐を記述しています
-// {isMenuOpen ? <FaXmark /> : <FaBars />}👍
-
-
+export default function Header({ title, className }: HeaderProps) {
+  return (
+    <header>
+      <h1 className={className}>{title}</h1>
+    </header>
+  );
+}
 
 // 元々、ナビゲーションタグ内の、<ul>の中のアイテム（<li>）が、繰り返し記述されていました。
 
@@ -56,8 +22,6 @@ export default Header;
 
 // これで、ヘッダーに、新しい項目を追加するのも簡単です 👍
 
-
-
 // フッターに、最新の年（2026）を記載することは、一般的に行われます。
 // 今回は、{new Date().getFullYear()} のように、直接 JS の構文を記述しています
 // しかし、コメントアウトにある方法でも、同じ結果が出力されます。
@@ -69,7 +33,6 @@ export default Header;
 // onChange: 入力変更イベント
 // onSubmit: フォーム送信イベント
 // ボタンがクリックされた時（イベント発生時）に発火する関数を使用する方法を、しっかり学びましょう！
-
 
 // 3️⃣ 論理演算子（&&）を使った条件付きレンダリング
 // 前回学んだ三項演算子との違い：

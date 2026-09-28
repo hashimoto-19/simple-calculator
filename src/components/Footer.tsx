@@ -1,10 +1,12 @@
-const Footer = () => {
-    //   const year = new Date().getFullYear();
-    return(
-        <footer>
-            <p>&copy; {year} 計算機アプリ</p>
-        </footer>
-    )
-
-}
+type FooterProps = {
+  className?: string;
+};
+const Footer = ({ className }: FooterProps) => {
+  const year = new Date().getFullYear();
+  return (
+    <footer className={className}>
+      <p>&copy; {year} 計算機アプリ</p>
+    </footer>
+  );
+};
 export default Footer;

@@ -2,6 +2,7 @@ import { Display } from "./components/Display";
 import { Button } from "./components/Button.tsx";
 import { useState } from "react";
 import Header from "./components/Header.tsx";
+import Footer from "./components/Footer.tsx";
 import "./index.css";
 
 function App() {
@@ -97,6 +98,7 @@ function App() {
           Count is {count}
         </button> */}
       </section>
+      <Footer className="text-center mt-10 py-4 text-zinc-800" />
     </>
   );
 }

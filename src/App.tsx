@@ -4,13 +4,14 @@ import { useState } from "react";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import "./index.css";
+import Social from "./components/social.tsx";
 
 function App() {
   const [displayValue, setDisplayValue] = useState("0");
 
   return (
     <>
-      {/* propsでtitleを渡して、classNameを渡して、text-2xl font-boldを渡して、計算機という文字を表示してください */}
+      <Social />
       <Header className="text-center font-bold mt-15 mb-6" title="計算機" />
       <section id="center">
         <div className="calculator bg-zinc-900 rounded-lg w-[80%] mx-auto p-20">

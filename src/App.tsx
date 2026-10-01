@@ -8,7 +8,14 @@ import Social from "./components/social.tsx";
 
 function App() {
   const [displayValue, setDisplayValue] = useState("0");
-
+  function pushNumber(digit: string) {
+    setDisplayValue((current) => {
+      if (current === "0") {
+        return digit === "0" ? "0" : digit;
+      }
+      return current + digit;
+    });
+  }
   return (
     <>
       <Social />
@@ -24,7 +31,7 @@ function App() {
             <Button
               className="text-white text-4xl font-bold"
               label="8"
-              onClick={() => setDisplayValue("8")}
+              onClick={() => pushNumber("8")}
             />
             <Button
               className="text-white text-4xl font-bold"

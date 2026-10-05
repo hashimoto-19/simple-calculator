@@ -4,7 +4,7 @@ import { useState } from "react";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import "./index.css";
-import Social from "./components/social.tsx";
+import Social from "./components/Social.tsx";
 
 function App() {
   const [displayValue, setDisplayValue] = useState("0");

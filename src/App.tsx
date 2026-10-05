@@ -36,55 +36,55 @@ function App() {
             <Button
               className="text-white text-4xl font-bold"
               label="7"
-              onClick={() => setDisplayValue("7")}
+              onClick={() => pushNumber("7")}
             />
             <Button
               className="text-white text-4xl font-bold"
               label="9"
-              onClick={() => setDisplayValue("9")}
+              onClick={() => pushNumber("9")}
             />
             <Button className="text-white text-4xl font-bold" label="÷" />
             <Button
               className="text-white text-4xl font-bold"
               label="4"
-              onClick={() => setDisplayValue("4")}
+              onClick={() => pushNumber("4")}
             />
             <Button
               className="text-white text-4xl font-bold"
               label="5"
-              onClick={() => setDisplayValue("5")}
+              onClick={() => pushNumber("5")}
             />
             <Button
               className="text-white text-4xl font-bold"
               label="6"
-              onClick={() => setDisplayValue("6")}
+              onClick={() => pushNumber("6")}
             />
             <Button className="text-white text-4xl font-bold" label="×" />
             <Button
               className="text-white text-4xl font-bold"
               label="1"
-              onClick={() => setDisplayValue("1")}
+              onClick={() => pushNumber("1")}
             />
             <Button
               className="text-white text-4xl font-bold"
               label="2"
-              onClick={() => setDisplayValue("2")}
+              onClick={() => pushNumber("2")}
             />
             <Button
               className="text-white text-4xl font-bold"
               label="3"
-              onClick={() => setDisplayValue("3")}
+              onClick={() => pushNumber("3")}
             />
             <Button className="text-white text-4xl font-bold" label="-" />
             <Button
               className="text-white text-4xl font-bold"
               label="0"
-              onClick={() => setDisplayValue("0")}
+              onClick={() => pushNumber("0")}
             />
             <Button
               className="text-white text-4xl font-bold"
               label="AC"
-              onClick={() => setDisplayValue("0")}
+              onClick={() => pushNumber("0")}
             />
             <Button
               className="text-white text-4xl font-bold"

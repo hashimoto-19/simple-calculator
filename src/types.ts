@@ -23,9 +23,6 @@ export type CalculatorButton = "digit" | "operator";
 //  operator: Operator | null;
 //  waitingForOperand: boolean;
 // };
-// AC → AC の処理を直すときに埋める（例: "AC"）
-export type CalculatorAC = {};
-
 // ※ 小数点（"."）は不要。型もボタンも作らなくてよい。
 
 // ---------- いまの作業 ----------

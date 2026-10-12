@@ -32,15 +32,36 @@ function App() {
   }
 
   function chooseoperator(op: Operator) {
+    if (
+      operator !== null &&
+      previousValue !== null &&
+      waitingForOperand === false
+    ) {
+      const result = calculate(previousValue, Number(displayValue), operator);
+      setDisplayValue(String(result));
+      setPreviousValue(result);
+    } else {
+      setPreviousValue(Number(displayValue));
+    }
     setOperator(op);
     setWaitingForOperand(true);
-    setPreviousValue(Number(displayValue));
 
     console.log("chooseoperator", {
       operator: op,
       previous: Number(displayValue),
       waiting: true,
     });
+  }
+
+  function handleEquals() {
+    if (operator === null || previousValue === null) {
+      return;
+    }
+    const result = calculate(previousValue, Number(displayValue), operator);
+    setDisplayValue(Number.isFinite(result) ? String(result) : "Error");
+    setOperator(null);
+    setPreviousValue(null);
+    setWaitingForOperand(true);
   }
 
   return (
@@ -153,7 +174,7 @@ function App() {
               className="text-white text-4xl font-bold"
               label="="
               variant="digit"
-              onClick={() => console.log("equals")}
+              onClick={() => handleEquals()}
             />
             <Button
               className="text-white text-4xl font-bold"

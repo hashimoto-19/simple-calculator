@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>計算機アプリの仕組み（初学者向け）</title>
+  <style>
+    @page { size: A4; margin: 18mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      color: #1a1a1a;
+      line-height: 1.6;
+      font-size: 12pt;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    h1 { font-size: 20pt; margin: 0 0 8px; }
+    h2 {
+      font-size: 14pt;
+      margin: 28px 0 12px;
+      padding-bottom: 4px;
+      border-bottom: 2px solid #333;
+    }
+    p { margin: 8px 0; }
+    .lead { color: #444; margin-bottom: 20px; }
+    .box {
+      border: 1.5px solid #333;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 10px 0;
+      background: #fafafa;
+    }
+    .box h3 { margin: 0 0 8px; font-size: 12pt; }
+    .row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .card {
+      flex: 1 1 140px;
+      border: 1.5px solid #333;
+      border-radius: 10px;
+      padding: 10px;
+      min-width: 140px;
+    }
+    .card .label { font-size: 10pt; color: #555; }
+    .card .value { font-weight: 600; font-size: 11pt; margin-top: 4px; }
+    .arrow {
+      text-align: center;
+      font-size: 16pt;
+      margin: 6px 0;
+      color: #333;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 12px 0;
+      font-size: 11pt;
+    }
+    th, td {
+      border: 1px solid #666;
+      padding: 8px 10px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #eee; }
+    .flow-step {
+      border-left: 4px solid #333;
+      padding: 8px 12px;
+      margin: 8px 0;
+      background: #f5f5f5;
+    }
+    .flow-step strong { display: block; margin-bottom: 2px; }
+    .memo {
+      display: inline-block;
+      border: 2px dashed #555;
+      border-radius: 8px;
+      padding: 8px 12px;
+      margin: 4px;
+      background: #fffef5;
+      min-width: 120px;
+    }
+    .gate {
+      text-align: center;
+      margin: 16px 0;
+    }
+    .gate-box {
+      display: inline-block;
+      border: 2px solid #333;
+      border-radius: 50%;
+      width: 110px;
+      height: 110px;
+      line-height: 1.3;
+      padding-top: 28px;
+      background: #eef3ff;
+      font-weight: 600;
+    }
+    .ok { color: #0a6b2d; font-weight: 600; }
+    .ng { color: #a11; font-weight: 600; }
+    .key {
+      margin-top: 24px;
+      padding: 14px;
+      border: 2px solid #333;
+      border-radius: 10px;
+      background: #f0f7ff;
+    }
+    code {
+      font-family: ui-monospace, Menlo, monospace;
+      background: #eee;
+      padding: 1px 5px;
+      border-radius: 4px;
+      font-size: 10.5pt;
+    }
+    .small { font-size: 10pt; color: #555; }
+  </style>
+</head>
+<body>
+  <h1>計算機アプリの仕組み</h1>
+  <p class="lead">simple-calculator / 初学者向け解説（useState・型・部品の役割）</p>
+
+  <h2>1. 全体像</h2>
+  <p>画面の部品と、裏で覚えている「4つのメモ」が分かれています。</p>
+  <div class="row">
+    <div class="card">
+      <div class="label">見える部分</div>
+      <div class="value">Display（画面）</div>
+      <div class="value">Button（0〜9, +, =, AC…）</div>
+    </div>
+    <div class="card">
+      <div class="label">見えないメモ（useState）</div>
+      <div class="value">displayValue</div>
+      <div class="value">previousValue</div>
+      <div class="value">operator</div>
+      <div class="value">waitingForOperand</div>
+    </div>
+    <div class="card">
+      <div class="label">計算用</div>
+      <div class="value">calculate.ts</div>
+      <div class="small">a と b を計算して結果を返す</div>
+    </div>
+  </div>
+  <p class="small">ボタンを押す → App.tsx がメモを書き換え → Display が新しい値を表示。必要なら calculate を呼ぶ。</p>
+
+  <h2>2. useState は「メモ用紙」</h2>
+  <div class="box">
+    <h3>1枚のメモのイメージ</h3>
+    <div class="row">
+      <div class="memo">
+        <div class="label">今の値</div>
+        <div><code>displayValue = "7"</code></div>
+      </div>
+      <div class="memo">
+        <div class="label">書き換える道具</div>
+        <div><code>setDisplayValue</code></div>
+      </div>
+    </div>
+    <p>ボタンを押す → <code>setDisplayValue(...)</code> でメモを書く → React が画面を描き直す</p>
+  </div>
+  <table>
+    <thead>
+      <tr><th>言葉</th><th>意味</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>displayValue</code></td><td>今メモに書いてある内容</td></tr>
+      <tr><td><code>setDisplayValue(...)</code></td><td>メモを書き換える</td></tr>
+      <tr><td>書き換えたあと</td><td>React が画面を描き直す</td></tr>
+    </tbody>
+  </table>
+  <p>このアプリではメモが4枚あります。</p>
+  <table>
+    <thead>
+      <tr><th>メモ</th><th>例</th><th>役割</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>displayValue</code></td><td><code>"15"</code></td><td>画面に出す文字列</td></tr>
+      <tr><td><code>previousValue</code></td><td><code>7</code></td><td>演算子の前の数</td></tr>
+      <tr><td><code>operator</code></td><td><code>"+"</code></td><td>どの計算か</td></tr>
+      <tr><td><code>waitingForOperand</code></td><td><code>true</code> / <code>false</code></td><td>演算子の直後か</td></tr>
+    </tbody>
+  </table>
+
+  <h2>3. 例：7 + 8 = のとき</h2>
+  <div class="flow-step">
+    <strong>① 7 を押す</strong>
+    画面メモだけ <code>"7"</code>
+  </div>
+  <div class="flow-step">
+    <strong>② + を押す</strong>
+    前の数に <code>7</code>、演算子に <code>"+"</code>、待ちをオン（<code>waitingForOperand = true</code>）
+  </div>
+  <div class="flow-step">
+    <strong>③ 8 を押す</strong>
+    待ちオンなので末尾に足さず、画面を <code>"8"</code> に切り替え。待ちをオフ
+  </div>
+  <div class="flow-step">
+    <strong>④ = を押す</strong>
+    <code>calculate(7, 8, "+")</code> → <code>15</code>。画面に出して、計算用メモをリセット
+  </div>
+
+  <h2>4. 型は「門番」</h2>
+  <div class="gate">
+    <div class="gate-box">型チェック<br />Operator</div>
+  </div>
+  <p><code>type Operator = "+" | "-" | "×" | "÷";</code></p>
+  <p>意味は、「演算子はこの4文字だけOK」です。</p>
+  <ul>
+    <li class="ok">通る例：<code>chooseoperator("+")</code></li>
+    <li class="ng">止まる例：<code>chooseoperator("*")</code>（キーボードの * は型に無い）</li>
+  </ul>
+  <p><code>digit: string</code> なのは、数字も画面も<strong>文字としてつなぐ</strong>ためです。</p>
+  <ul>
+    <li><code>"1" + "2"</code> → <code>"12"</code>（文字列の連結）</li>
+    <li><code>1 + 2</code> → <code>3</code>（数値の足し算）</li>
+  </ul>
+
+  <h2>5. 部品の役割</h2>
+  <table>
+    <thead>
+      <tr><th>ファイル / 部品</th><th>役割</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>App.tsx</code></td><td>司令塔。メモの持ち主。押されたらどうするか</td></tr>
+      <tr><td><code>Display</code></td><td>渡された文字を表示する</td></tr>
+      <tr><td><code>Button</code></td><td>見た目とクリックの受け皿</td></tr>
+      <tr><td><code>calculate.ts</code></td><td>足す・引くなどの計算だけ</td></tr>
+      <tr><td><code>types.ts</code></td><td>許す値のルール（型）</td></tr>
+    </tbody>
+  </table>
+
+  <div class="key">
+    <strong>一番大事な一文</strong><br />
+    ボタンを押す → <code>set〜</code> でメモを書き換える → 画面が新しいメモを表示する。型はそのメモや引数に変な値が入らないように見張る。
+  </div>
+</body>
+</html>

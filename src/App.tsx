@@ -7,7 +7,7 @@ import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import "./index.css";
 import Social from "./components/Social.tsx";
-
+import { calculate } from "./utils/calculate.ts";
 // 演算ロジックは自分で書く → ヒント: src/電卓ロジックのヒント.md
 
 function App() {
@@ -17,6 +17,12 @@ function App() {
   const [waitingForOperand, setWaitingForOperand] = useState(false);
 
   function pushNumber(digit: string) {
+    if (waitingForOperand) {
+      setDisplayValue(digit === "0" ? "0" : digit);
+      setWaitingForOperand(false);
+      return;
+    }
+
     setDisplayValue((current) => {
       if (current === "0") {
         return digit === "0" ? "0" : digit;
@@ -24,6 +30,19 @@ function App() {
       return current + digit;
     });
   }
+
+  function chooseoperator(op: Operator) {
+    setOperator(op);
+    setWaitingForOperand(true);
+    setPreviousValue(Number(displayValue));
+
+    console.log("chooseoperator", {
+      operator: op,
+      previous: Number(displayValue),
+      waiting: true,
+    });
+  }
+
   return (
     <>
       <Header className="text-center font-bold mt-15 mb-6" title="計算機" />
@@ -57,7 +76,7 @@ function App() {
               className="text-white text-4xl font-bold"
               label="÷"
               variant="operator"
-              onClick={() => console.log("divide")}
+              onClick={() => chooseoperator("÷")}
             />
             <Button
               className="text-white text-4xl font-bold"
@@ -81,7 +100,7 @@ function App() {
               className="text-white text-4xl font-bold"
               label="×"
               variant="operator"
-              onClick={() => console.log("multiply")}
+              onClick={() => chooseoperator("×")}
             />
             <Button
               className="text-white text-4xl font-bold"
@@ -105,7 +124,7 @@ function App() {
               className="text-white text-4xl font-bold"
               label="-"
               variant="operator"
-              onClick={() => console.log("subtract")}
+              onClick={() => chooseoperator("-")}
             />
             <Button
               className="text-white text-4xl font-bold"
@@ -140,7 +159,7 @@ function App() {
               className="text-white text-4xl font-bold"
               label="+"
               variant="operator"
-              onClick={() => console.log("plus")}
+              onClick={() => chooseoperator("+")}
             />
           </div>
         </div>

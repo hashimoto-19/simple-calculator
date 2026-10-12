@@ -1,4 +1,5 @@
 import type { CalculatorButton } from "../types";
+
 type ButtonProps = {
   label: string;
   variant: CalculatorButton;
@@ -7,38 +8,23 @@ type ButtonProps = {
 };
 
 export function Button({ label, variant, className, onClick }: ButtonProps) {
-  // ❌ className={variant + " " + className}
-  //    → HTML では class="digit ..." になるだけ。digit という CSS は無いので色は付かない。
-  //
-  // ✅ やること: variant（名前）を、Tailwind の色クラス（見た目）に変換する
-  //
-  // 手順:
-  // 1. 下の colorClass を、variant ごとに変える
-  // 2. button の className に colorClass と className を両方入れる
-  //
-  // 2色だけ:
-  //   digit    → "bg-zinc-700 text-white"
-  //   operator → "bg-orange-500 text-white"
-
   const colors = {
-    digit: "bg-zinc-400 text-black",
-    operator: "bg-orange-500 text-white",
+    digit: "bg-neutral-700 text-white hover:bg-neutral-600",
+    operator: "bg-orange-500 text-white hover:bg-orange-400",
   };
-  const colorClass = colors[variant];
-  // ← ここに上の色クラスを入れる
 
   return (
     <button
       type="button"
-      className={colorClass + "" + (className ?? "")}
+      className={[
+        "aspect-square w-full rounded-full flex items-center justify-center",
+        "text-3xl font-medium transition-colors active:opacity-80",
+        colors[variant],
+        className ?? "",
+      ].join(" ")}
       onClick={onClick}
     >
       {label}
     </button>
   );
 }
-
-// ButtonProps の型定義は、実行時に表示するものではなく、TypeScript のチェック専用だからです。
-
-// export default function Button() {}読み込み時は {} を使いません。名前は変更できます。
-// export function Button() {}名前付きで export します。複数 export できます

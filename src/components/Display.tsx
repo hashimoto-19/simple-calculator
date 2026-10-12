@@ -6,5 +6,14 @@ type DisplayProps = {
 };
 
 export function Display({ value, className }: DisplayProps) {
-  return <div className={className}>{value}</div>;
+  return (
+    <div
+      className={[
+        "w-full text-right text-white text-6xl font-light tracking-tight tabular-nums",
+        className ?? "",
+      ].join(" ")}
+    >
+      {value}
+    </div>
+  );
 }

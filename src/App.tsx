@@ -65,96 +65,43 @@ function App() {
   }
 
   return (
-    <>
-      <Header className="text-center font-bold mt-15 mb-6" title="計算機" />
-      <section id="center">
-        <div className="calculator bg-zinc-900 rounded-lg w-[80%] mx-auto p-20">
-          <div className="display mb-6">
-            <div className="text-white text-4xl font-bold text-center">
-              <Display className="Display" value={displayValue} />
-            </div>
+    <div className="min-h-screen bg-zinc-200">
+      <Header
+        className="text-center font-bold text-zinc-800 pt-10 pb-4"
+        title="計算機"
+      />
+      <section id="center" className="flex justify-center px-4 pb-12">
+        <div className="w-full max-w-[320px] bg-black rounded-[2rem] p-5 shadow-lg">
+          <div className="mb-6 min-h-[5rem] flex items-end px-2">
+            <Display value={displayValue} />
           </div>
-          <div className="buttons grid grid-cols-4 gap-4">
+          <div className="grid grid-cols-4 gap-3">
+            <Button label="7" variant="digit" onClick={() => pushNumber("7")} />
+            <Button label="8" variant="digit" onClick={() => pushNumber("8")} />
+            <Button label="9" variant="digit" onClick={() => pushNumber("9")} />
             <Button
-              className="text-white text-4xl font-bold"
-              label="7"
-              variant="digit"
-              onClick={() => pushNumber("7")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
-              label="8"
-              variant="digit"
-              onClick={() => pushNumber("8")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
-              label="9"
-              variant="digit"
-              onClick={() => pushNumber("9")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
               label="÷"
               variant="operator"
               onClick={() => chooseoperator("÷")}
             />
+            <Button label="4" variant="digit" onClick={() => pushNumber("4")} />
+            <Button label="5" variant="digit" onClick={() => pushNumber("5")} />
+            <Button label="6" variant="digit" onClick={() => pushNumber("6")} />
             <Button
-              className="text-white text-4xl font-bold"
-              label="4"
-              variant="digit"
-              onClick={() => pushNumber("4")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
-              label="5"
-              variant="digit"
-              onClick={() => pushNumber("5")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
-              label="6"
-              variant="digit"
-              onClick={() => pushNumber("6")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
               label="×"
               variant="operator"
               onClick={() => chooseoperator("×")}
             />
+            <Button label="1" variant="digit" onClick={() => pushNumber("1")} />
+            <Button label="2" variant="digit" onClick={() => pushNumber("2")} />
+            <Button label="3" variant="digit" onClick={() => pushNumber("3")} />
             <Button
-              className="text-white text-4xl font-bold"
-              label="1"
-              variant="digit"
-              onClick={() => pushNumber("1")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
-              label="2"
-              variant="digit"
-              onClick={() => pushNumber("2")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
-              label="3"
-              variant="digit"
-              onClick={() => pushNumber("3")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
-              label="-"
+              label="−"
               variant="operator"
               onClick={() => chooseoperator("-")}
             />
+            <Button label="0" variant="digit" onClick={() => pushNumber("0")} />
             <Button
-              className="text-white text-4xl font-bold"
-              label="0"
-              variant="digit"
-              onClick={() => pushNumber("0")}
-            />
-            <Button
-              className="text-white text-4xl font-bold"
               label="AC"
               variant="digit"
               onClick={() => {
@@ -162,22 +109,14 @@ function App() {
                 setPreviousValue(null);
                 setOperator(null);
                 setWaitingForOperand(false);
-                console.log("reset", {
-                  display: "0",
-                  previous: null,
-                  operator: null,
-                  waiting: false,
-                });
               }}
             />
             <Button
-              className="text-white text-4xl font-bold"
               label="="
               variant="digit"
               onClick={() => handleEquals()}
             />
             <Button
-              className="text-white text-4xl font-bold"
               label="+"
               variant="operator"
               onClick={() => chooseoperator("+")}
@@ -186,8 +125,8 @@ function App() {
         </div>
       </section>
       <Social />
-      <Footer className="text-center mt-10 py-4 text-zinc-800" />
-    </>
+      <Footer className="text-center mt-6 py-4 text-zinc-800" />
+    </div>
   );
 }
 

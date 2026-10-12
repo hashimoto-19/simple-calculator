@@ -6,7 +6,7 @@ import type { Operator } from "./types.ts";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import "./index.css";
-import Social from "./components/SocialSection.tsx";
+import Social from "./components/Social.tsx";
 import { calculate } from "./utils/calculate.ts";
 // 演算ロジックは自分で書く → ヒント: src/電卓ロジックのヒント.md
 

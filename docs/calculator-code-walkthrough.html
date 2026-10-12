@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>計算機アプリ コード解説</title>
+  <style>
+    @page { size: A4; margin: 16mm; }
+    * { box-sizing: border-box; }
+    body {
+      font-family: "Hiragino Sans", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+      color: #1a1a1a;
+      line-height: 1.55;
+      font-size: 11pt;
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    h1 { font-size: 18pt; margin: 0 0 6px; }
+    h2 {
+      font-size: 13pt;
+      margin: 22px 0 8px;
+      padding-bottom: 3px;
+      border-bottom: 2px solid #333;
+      page-break-after: avoid;
+    }
+    h3 { font-size: 11.5pt; margin: 14px 0 6px; }
+    .lead { color: #555; margin-bottom: 14px; font-size: 10.5pt; }
+    p { margin: 6px 0; }
+    pre {
+      background: #1e1e1e;
+      color: #e8e8e8;
+      padding: 12px 14px;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 9.5pt;
+      line-height: 1.45;
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      page-break-inside: avoid;
+    }
+    code {
+      font-family: ui-monospace, Menlo, Consolas, monospace;
+      background: #eee;
+      padding: 1px 4px;
+      border-radius: 3px;
+      font-size: 10pt;
+    }
+    pre code { background: none; color: inherit; padding: 0; }
+    .note {
+      border-left: 4px solid #3366cc;
+      background: #f3f7ff;
+      padding: 8px 12px;
+      margin: 8px 0 12px;
+      font-size: 10.5pt;
+    }
+    .warn {
+      border-left: 4px solid #cc7722;
+      background: #fff8f0;
+      padding: 8px 12px;
+      margin: 8px 0 12px;
+      font-size: 10.5pt;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 8px 0 12px;
+      font-size: 10.5pt;
+    }
+    th, td {
+      border: 1px solid #777;
+      padding: 6px 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+    th { background: #eee; }
+    .file { color: #555; font-size: 10pt; margin: 0 0 6px; }
+    ul { margin: 6px 0 10px; padding-left: 1.2em; }
+    li { margin: 3px 0; }
+    .key {
+      margin-top: 18px;
+      padding: 12px;
+      border: 2px solid #333;
+      border-radius: 8px;
+      background: #f0f7ff;
+    }
+  </style>
+</head>
+<body>
+  <h1>計算機アプリ コード解説</h1>
+  <p class="lead">仕組み解説PDFとは別冊。実際のコードを上から読んでいく版です。</p>
+
+  <h2>0. ファイルの役割</h2>
+  <table>
+    <thead><tr><th>ファイル</th><th>何をしているか</th></tr></thead>
+    <tbody>
+      <tr><td><code>src/types.ts</code></td><td>型（門番）の定義</td></tr>
+      <tr><td><code>src/utils/calculate.ts</code></td><td>四則演算だけ</td></tr>
+      <tr><td><code>src/components/Display.tsx</code></td><td>画面表示</td></tr>
+      <tr><td><code>src/components/Button.tsx</code></td><td>ボタン見た目とクリック</td></tr>
+      <tr><td><code>src/App.tsx</code></td><td>司令塔（state と処理）</td></tr>
+    </tbody>
+  </table>
+
+  <h2>1. types.ts — 型</h2>
+  <p class="file">src/types.ts</p>
+  <pre><code>export type Operator = "+" | "-" | "×" | "÷";
+export type Digit = "0" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | "9";
+export type CalculatorButton = "digit" | "operator";</code></pre>
+  <div class="note">
+    <strong>読み方:</strong> <code>Operator</code> は「この4文字だけ許す」という意味。<br />
+    <code>|</code> は「または」。<code>"*"</code> や <code>"/"</code> はここに無いので TypeScript がエラーにする。
+  </div>
+
+  <h2>2. calculate.ts — 計算だけ</h2>
+  <p class="file">src/utils/calculate.ts</p>
+  <pre><code>export function calculate(
+  a: number,
+  b: number,
+  operator: Operator
+): number {
+  switch (operator) {
+    case "+": return a + b;
+    case "-": return a - b;
+    case "×": return a * b;
+    case "÷": return a / b;
+    default: throw new Error("Invalid operator");
+  }
+}</code></pre>
+  <table>
+    <thead><tr><th>部分</th><th>意味</th></tr></thead>
+    <tbody>
+      <tr><td><code>a</code></td><td>前の数（previousValue）</td></tr>
+      <tr><td><code>b</code></td><td>今の画面の数</td></tr>
+      <tr><td><code>operator</code></td><td>"+" など</td></tr>
+      <tr><td><code>: number</code></td><td>戻り値も数値</td></tr>
+    </tbody>
+  </table>
+  <div class="note">
+    例: <code>calculate(7, 8, "+")</code> → <code>15</code><br />
+    ボタンの見た目は知らない。計算だけ担当する。
+  </div>
+
+  <h2>3. Display.tsx — 渡された文字を出す</h2>
+  <p class="file">src/components/Display.tsx</p>
+  <pre><code>type DisplayProps = {
+  value: string;
+  className?: string;
+};
+
+export function Display({ value, className }: DisplayProps) {
+  return &lt;div className={className}&gt;{value}&lt;/div&gt;;
+}</code></pre>
+  <div class="note">
+    <code>value</code> は App から来る <code>displayValue</code>。<br />
+    Display 自身は計算しない。「渡された文字列を表示する」だけ。
+  </div>
+
+  <h2>4. Button.tsx — 見た目とクリック</h2>
+  <p class="file">src/components/Button.tsx（要点）</p>
+  <pre><code>type ButtonProps = {
+  label: string;
+  variant: CalculatorButton; // "digit" | "operator"
+  onClick?: () => void;
+};
+
+export function Button({ label, variant, className, onClick }: ButtonProps) {
+  const colors = {
+    digit: "bg-zinc-400 text-black",
+    operator: "bg-orange-500 text-white",
+  };
+  const colorClass = colors[variant];
+  return (
+    &lt;button type="button" className={...} onClick={onClick}&gt;
+      {label}
+    &lt;/button&gt;
+  );
+}</code></pre>
+  <div class="note">
+    <code>label</code> … ボタンに書く文字（"7" や "+"）<br />
+    <code>variant</code> … 色の種類<br />
+    <code>onClick</code> … 押されたとき App が渡した関数を実行
+  </div>
+
+  <h2>5. App.tsx — 司令塔</h2>
+
+  <h3>5-1. import</h3>
+  <pre><code>import { useState } from "react";
+import type { Operator } from "./types.ts";
+import { calculate } from "./utils/calculate.ts";
+import { Display } from "./components/Display";
+import { Button } from "./components/Button.tsx";</code></pre>
+  <div class="note">
+    <code>import type</code> は型だけ取り込む書き方。<br />
+    <code>calculate</code> は実行時に使う本物の関数。
+  </div>
+
+  <h3>5-2. useState（4つのメモ）</h3>
+  <pre><code>const [displayValue, setDisplayValue] = useState("0");
+const [previousValue, setPreviousValue] = useState&lt;number | null&gt;(null);
+const [operator, setOperator] = useState&lt;Operator | null&gt;(null);
+const [waitingForOperand, setWaitingForOperand] = useState(false);</code></pre>
+  <table>
+    <thead><tr><th>コード</th><th>読み方</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>useState("0")</code></td>
+        <td>最初の画面は "0"。左が今の値、右が書き換え関数</td>
+      </tr>
+      <tr>
+        <td><code>number | null</code></td>
+        <td>数値か、まだ無い（null）</td>
+      </tr>
+      <tr>
+        <td><code>Operator | null</code></td>
+        <td>演算子か、まだ選んでいない</td>
+      </tr>
+      <tr>
+        <td><code>useState(false)</code></td>
+        <td>最初は「次の数字待ち」ではない</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>5-3. pushNumber — 数字ボタン</h3>
+  <pre><code>function pushNumber(digit: string) {
+  if (waitingForOperand) {
+    setDisplayValue(digit === "0" ? "0" : digit);
+    setWaitingForOperand(false);
+    return;
+  }
+
+  setDisplayValue((current) => {
+    if (current === "0") {
+      return digit === "0" ? "0" : digit;
+    }
+    return current + digit;
+  });
+}</code></pre>
+  <div class="note">
+    <strong>上の if:</strong> 演算子の直後なら、画面を新しい1桁だけにする（"12" にしない）<br />
+    <strong>下の setDisplayValue((current) =&gt; …):</strong> React が今の画面を <code>current</code> として渡す。<br />
+    <code>current + digit</code> は文字列連結。"1" + "2" → "12"
+  </div>
+  <div class="warn">
+    ボタン側はこう呼ぶ: <code>onClick={() =&gt; pushNumber("7")}</code><br />
+    ここで渡した <code>"7"</code> が、関数の引数 <code>digit</code> になる。
+  </div>
+
+  <h3>5-4. chooseoperator — 演算子ボタン</h3>
+  <pre><code>function chooseoperator(op: Operator) {
+  if (
+    operator !== null &&
+    previousValue !== null &&
+    waitingForOperand === false
+  ) {
+    const result = calculate(previousValue, Number(displayValue), operator);
+    setDisplayValue(String(result));
+    setPreviousValue(result);
+  } else {
+    setPreviousValue(Number(displayValue));
+  }
+  setOperator(op);
+  setWaitingForOperand(true);
+}</code></pre>
+  <div class="note">
+    <strong>if の中（連続計算）:</strong> すでに演算中なら、先に今の計算をして結果を覚える<br />
+    <strong>else:</strong> 初めて演算子を押した → 今の画面を前の数にする<br />
+    最後に、押した演算子を覚え、次の数字待ちにする
+  </div>
+  <p>例: <code>onClick={() =&gt; chooseoperator("+")}</code> → 引数 <code>op</code> は <code>"+"</code></p>
+
+  <h3>5-5. handleEquals — = ボタン</h3>
+  <pre><code>function handleEquals() {
+  if (operator === null || previousValue === null) {
+    return; // まだ計算できない
+  }
+  const result = calculate(previousValue, Number(displayValue), operator);
+  setDisplayValue(Number.isFinite(result) ? String(result) : "Error");
+  setOperator(null);
+  setPreviousValue(null);
+  setWaitingForOperand(true);
+}</code></pre>
+  <div class="note">
+    <code>Number(displayValue)</code> … 画面の文字 "8" を数値 8 にする<br />
+    <code>String(result)</code> … 数値 15 を文字 "15" にして画面へ<br />
+    最後の3行 … 計算メモを消し、次の数字で新しい計算を始められるようにする
+  </div>
+  <div class="warn">
+    <code>handleEquals</code> に引数は無い。<code>=</code> は計算の種類ではなく「実行ボタン」。<br />
+    演算子はすでに <code>operator</code> state に入っている。
+  </div>
+
+  <h3>5-6. AC — 全部リセット</h3>
+  <pre><code>onClick={() =&gt; {
+  setDisplayValue("0");
+  setPreviousValue(null);
+  setOperator(null);
+  setWaitingForOperand(false);
+}}</code></pre>
+  <div class="note">画面だけ戻すと、裏の計算メモが残る。4つまとめて初期値に戻す。</div>
+
+  <h3>5-7. JSX — 画面へのつなぎ</h3>
+  <pre><code>&lt;Display value={displayValue} /&gt;
+
+&lt;Button label="7" variant="digit"
+  onClick={() =&gt; pushNumber("7")} /&gt;
+
+&lt;Button label="+" variant="operator"
+  onClick={() =&gt; chooseoperator("+")} /&gt;
+
+&lt;Button label="=" variant="digit"
+  onClick={() =&gt; handleEquals()} /&gt;</code></pre>
+  <div class="note">
+    <code>value={displayValue}</code> … 波括弧の中は JavaScript の値<br />
+    数字ボタン → <code>pushNumber</code><br />
+    演算子 → <code>chooseoperator</code><br />
+    = → <code>handleEquals</code>
+  </div>
+
+  <h2>6. コードで追う：7 + 8 =</h2>
+  <table>
+    <thead><tr><th>操作</th><th>呼ばれる関数</th><th>主な変化</th></tr></thead>
+    <tbody>
+      <tr>
+        <td>7</td>
+        <td><code>pushNumber("7")</code></td>
+        <td>displayValue → "7"</td>
+      </tr>
+      <tr>
+        <td>+</td>
+        <td><code>chooseoperator("+")</code></td>
+        <td>previousValue → 7 / operator → "+" / waiting → true</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td><code>pushNumber("8")</code></td>
+        <td>waiting が true なので displayValue → "8"（末尾に足さない）</td>
+      </tr>
+      <tr>
+        <td>=</td>
+        <td><code>handleEquals()</code></td>
+        <td>calculate(7, 8, "+") → 15 → 画面 "15"、演算メモをクリア</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="key">
+    <strong>コードを読む順番のおすすめ</strong><br />
+    ① types → ② calculate → ③ Display / Button → ④ App の useState → ⑤ pushNumber → ⑥ chooseoperator → ⑦ handleEquals → ⑧ JSX の onClick
+  </div>
+</body>
+</html>

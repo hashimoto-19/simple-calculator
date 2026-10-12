@@ -15,7 +15,7 @@ function App() {
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operator, setOperator] = useState<Operator | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
-  
+
   function pushNumber(digit: string) {
     setDisplayValue((current) => {
       if (current === "0") {
@@ -117,7 +117,18 @@ function App() {
               className="text-white text-4xl font-bold"
               label="AC"
               variant="digit"
-              onClick={() => setDisplayValue("0")}
+              onClick={() => {
+                setDisplayValue("0");
+                setPreviousValue(null);
+                setOperator(null);
+                setWaitingForOperand(false);
+                console.log("reset", {
+                  display: "0",
+                  previous: null,
+                  operator: null,
+                  waiting: false,
+                });
+              }}
             />
             <Button
               className="text-white text-4xl font-bold"

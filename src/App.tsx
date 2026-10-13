@@ -6,7 +6,7 @@ import type { Operator } from "./types.ts";
 import Header from "./components/Header.tsx";
 import Footer from "./components/Footer.tsx";
 import "./index.css";
-import Social from "./components/Social.tsx";
+
 import { calculate } from "./utils/calculate.ts";
 // 演算ロジックは自分で書く → ヒント: src/電卓ロジックのヒント.md
 
@@ -111,11 +111,7 @@ function App() {
                 setWaitingForOperand(false);
               }}
             />
-            <Button
-              label="="
-              variant="digit"
-              onClick={() => handleEquals()}
-            />
+            <Button label="=" variant="digit" onClick={() => handleEquals()} />
             <Button
               label="+"
               variant="operator"
@@ -124,7 +120,7 @@ function App() {
           </div>
         </div>
       </section>
-      <Social />
+
       <Footer className="text-center mt-6 py-4 text-zinc-800" />
     </div>
   );

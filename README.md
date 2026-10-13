@@ -9,8 +9,6 @@
 
 さらに、実際の開発現場を想定し、TypeScriptの活用やGit/GitHubによるバージョン管理を実践します。
 
-**公開URL:** https://hashimoto-19.github.io/simple-calculator/
-
 ## 学習目標
 
 - **Reactの基礎**: コンポーネントの分割、`useState` を用いた状態管理（入力値、計算結果、演算子の状態など）、イベントハンドリングを学習します。

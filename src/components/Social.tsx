@@ -1,13 +1,7 @@
-import type { ReactNode } from "react";
 import { FaXTwitter, FaGithub, FaRegFileLines } from "react-icons/fa6";
 import { SOCIAL } from "../constants";
 
-type SocialLinkCardProps = {
-  href: string;
-  children: ReactNode;
-};
-
-const SocialLinkCard = ({ href, children }: SocialLinkCardProps) => {
+const SocialLinkCard = ({ href, children }) => {
   return (
     <a
       className="flex items-center p-12 sm:p-16 rounded-2xl border border-stone-200 hover:bg-stone-50 text-stone-600 hover:text-stone-900"

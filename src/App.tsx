@@ -1,6 +1,6 @@
 import { Display } from "./components/Display";
 import { Button } from "./components/Button.tsx";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import type { Operator } from "./types.ts";
 
 import Header from "./components/Header.tsx";
@@ -15,6 +15,20 @@ function App() {
   const [previousValue, setPreviousValue] = useState<number | null>(null);
   const [operator, setOperator] = useState<Operator | null>(null);
   const [waitingForOperand, setWaitingForOperand] = useState(false);
+  const BASE_URL = "https://apis-cloud.net";
+  async function getQuote() {
+    const response = await fetch(`${BASE_URL}/quotes/random`);
+    if (!response.ok) {
+      throw new Error("名言の獲得に失敗しました(${response.status})");
+    }
+    return response.json();
+  }
+  const [quote, setQuote] = useState<string | null>(null);
+  useEffect(() => {
+    getQuote().then((data) => {
+      setQuote(data.text);
+    });
+  }, []);
 
   function pushNumber(digit: string) {
     if (!waitingForOperand && displayValue.length >= 10) {
@@ -74,7 +88,7 @@ function App() {
         title="計算機"
       />
       <section id="center" className="flex justify-center px-4">
-        名言を表示する（1回きりの処理）
+        <p>{quote}</p>
       </section>
       <section id="center" className="flex justify-center px-4">
         <div className="w-full max-w-[320px] bg-black rounded-[2rem] p-5 shadow-lg">

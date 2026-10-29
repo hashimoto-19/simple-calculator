@@ -17,6 +17,9 @@ function App() {
   const [waitingForOperand, setWaitingForOperand] = useState(false);
 
   function pushNumber(digit: string) {
+    if (!waitingForOperand && displayValue.length >= 10) {
+      return; // 10桁までしか入力できないようにする
+    }
     if (waitingForOperand) {
       setDisplayValue(digit === "0" ? "0" : digit);
       setWaitingForOperand(false);
@@ -70,7 +73,10 @@ function App() {
         className="text-center font-bold text-zinc-800 pt-10 pb-4"
         title="計算機"
       />
-      <section id="center" className="flex justify-center px-4 pb-12">
+      <section id="center" className="flex justify-center px-4">
+        名言を表示する（1回きりの処理）
+      </section>
+      <section id="center" className="flex justify-center px-4">
         <div className="w-full max-w-[320px] bg-black rounded-[2rem] p-5 shadow-lg">
           <div className="mb-6 min-h-[5rem] flex items-end px-2">
             <Display value={displayValue} />
@@ -121,7 +127,7 @@ function App() {
         </div>
       </section>
 
-      <Footer className="text-center mt-6 py-4 text-zinc-800" />
+      <Footer className="text-center py-4 text-zinc-800" />
     </div>
   );
 }

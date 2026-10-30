@@ -24,6 +24,7 @@ function App() {
     return response.json();
   }
   const [quote, setQuote] = useState<string | null>(null);
+  const [quote, setQuote] = useState<string>("");
   useEffect(() => {
     getQuote().then((data) => {
       setQuote(data.text);

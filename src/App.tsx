@@ -48,20 +48,26 @@ function App() {
     });
   }
 
+  // 演算子ボタン（+ − × ÷）を押したとき
+  // 例: 1 → + → 2 → + の「2つ目の +」では、先に 1+2 を計算してから次の演算子を覚える
   function chooseoperator(op: Operator) {
+    // 【連続計算できるとき】すでに演算子と左辺があり、かつ今の表示は「右辺の入力中」
+    // （waitingForOperand が true だと「演算子を押し直しただけ」なので、ここでは計算しない）
     if (
       operator !== null &&
       previousValue !== null &&
       waitingForOperand === false
     ) {
+      // 左辺 previousValue と、画面の右辺 displayValue を、前の演算子で計算
       const result = calculate(previousValue, Number(displayValue), operator);
-      setDisplayValue(String(result));
-      setPreviousValue(result);
+      setDisplayValue(String(result)); // 途中結果を画面に出す（1+2+ の時点で 3 と出る）
+      setPreviousValue(result); // その結果を、次の計算の左辺にする
     } else {
+      // 【初めて演算子を押したとき】今の画面の数字を左辺として覚える
       setPreviousValue(Number(displayValue));
     }
-    setOperator(op);
-    setWaitingForOperand(true);
+    setOperator(op); // 今回押された演算子（+ や × など）を覚える
+    setWaitingForOperand(true); // 次の数字入力は「上書き」するフラグ（12 にならないように）
 
     console.log("chooseoperator", {
       operator: op,
@@ -81,6 +87,18 @@ function App() {
     setWaitingForOperand(true);
   }
 
+  function backspace() {
+    if (waitingForOperand) {
+      return;
+    }
+    setDisplayValue((current) => {
+      if (current.length <= 1) {
+        return "0";
+      }
+      return current.slice(0, -1);
+    });
+  }
+
   return (
     <div className="min-h-screen bg-zinc-200">
       <Header
@@ -95,6 +113,13 @@ function App() {
             <Display value={displayValue} />
           </div>
           <div className="grid grid-cols-4 gap-3">
+            <div className="col-span-2"></div>
+            <Button
+              label="⌫"
+              variant="digit"
+              className="col-span-2 !aspect-auto h-16"
+              onClick={backspace}
+            />
             <Button label="7" variant="digit" onClick={() => pushNumber("7")} />
             <Button label="8" variant="digit" onClick={() => pushNumber("8")} />
             <Button label="9" variant="digit" onClick={() => pushNumber("9")} />

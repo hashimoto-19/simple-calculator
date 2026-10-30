@@ -87,11 +87,10 @@ function App() {
         className="text-center font-bold text-zinc-800 pt-10 pb-4"
         title="計算機"
       />
-      <section id="center" className="flex justify-center px-4">
-        <p>{quote}</p>
-      </section>
+   
       <section id="center" className="flex justify-center px-4">
         <div className="w-full max-w-[320px] bg-black rounded-[2rem] p-5 shadow-lg">
+        <p className="text-white font-bold text-1xl">{quote}</p>
           <div className="mb-6 min-h-[5rem] flex items-end px-2">
             <Display value={displayValue} />
           </div>

@@ -18,7 +18,7 @@ export function Button({ label, variant, className, onClick }: ButtonProps) {
       type="button"
       className={[
         "aspect-square w-full rounded-full flex items-center justify-center",
-        "text-3xl font-medium transition-colors active:opacity-80",
+        "text-3xl font-medium transition-colors active:opacity-80 pb-2",
         colors[variant],
         className ?? "",
       ].join(" ")}

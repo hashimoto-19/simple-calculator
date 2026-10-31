@@ -31,7 +31,7 @@ function App() {
   }, []);
 
   function pushNumber(digit: string) {
-    if (!waitingForOperand && displayValue.length >= 10) {
+    if (waitingForOperand === false && displayValue.length >= 10) {
       return; // 10桁までしか入力できないようにする
     }
     if (waitingForOperand) {
@@ -108,7 +108,10 @@ function App() {
 
       <section id="center" className="flex justify-center px-4">
         <div className="w-full max-w-[320px] bg-black rounded-[2rem] p-5 shadow-lg">
-          <p className="text-white font-bold text-1xl">{quote}</p>
+          <p className="text-white font-bold text-1xl">
+            名言：
+            {quote}
+          </p>
           <div className="mb-6 min-h-[5rem] flex items-end px-2">
             <Display value={displayValue} />
           </div>
